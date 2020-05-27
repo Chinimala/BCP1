@@ -2,11 +2,13 @@ from vector import Vector
 
 vector = Vector(5)
 print(vector)
+# vector = Vector((10.0, 15))
 vector = Vector((10, 15))
 print(vector)
 # vector = Vector((10, 15, 0))
 vector = Vector(range(2, 10, 2))
 print(vector)
+# vector2 = Vector([0, 1.0, 2.0, 3.0])
 vector2 = Vector([0.0, 1.0, 2.0, 3.0])
 print(vector2)
 # vector = Vector("string")

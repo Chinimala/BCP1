@@ -4,19 +4,19 @@ import numbers
 class Vector:
     def __init__(self, arg):
         if isinstance(arg, int):
-            self.size = arg
-            self.values = [x * 1.0 for x in range(0, arg)]
-        elif isinstance(arg, list):
-            self.size = len(arg)
+            self.values = [float(x) for x in range(0, arg)]
+        elif isinstance(arg, list)\
+                and all([isinstance(n, float) for n in arg]):
             self.values = arg
         elif isinstance(arg, range):
-            self.size = len(arg)
-            self.values = [x * 1.0 for x in arg]
-        elif isinstance(arg, tuple) and len(arg) == 2:
-            self.size = arg[1] - arg[0]
-            self.values = [x * 1.0 for x in range(*arg)]
+            self.values = [float(x) for x in arg]
+        elif isinstance(arg, tuple) and len(arg) == 2\
+                and all([isinstance(n, int) for n in arg]):
+            self.values = [float(x) for x in range(*arg)]
         else:
-            raise TypeError("argument must be int, range, tuple(2) or list")
+            raise TypeError("argument must be int, range, tuple of 2 int"
+                            "or list of floats")
+        self.size = len(self.values)
 
     def __str__(self):
         return "(Vector {})".format(self.values)
@@ -52,14 +52,15 @@ class Vector:
         return Vector([x / other for x in self.values])
 
     def __rtruediv__(self, other):
-        raise TypeError("Can only div vector by number")
+        raise NotImplementedError("Can only div vector by number")
 
     def __mul__(self, other):
         if isinstance(other, numbers.Number):
             return Vector([x * other for x in self.values])
         elif isinstance(other, Vector):
-            values = [x * y for x, y in zip(self.values, other.values)]
-            return Vector(values)
+            if self.size != other.size:
+                raise ValueError("Can only mult same size vectors")
+            return sum([x * y for x, y in zip(self.values, other.values)])
         raise TypeError("Can only mult vector with number or vector")
 
     def __rmul__(self, other):
