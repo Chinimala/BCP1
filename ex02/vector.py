@@ -26,18 +26,19 @@ class Vector:
 
     def __add__(self, other):
         if not isinstance(other, Vector):
-            raise TypeError("Can only add vector to vector")
+            return NotImplemented
         elif other.size != self.size:
             raise ValueError("Can only add same size vectors")
-        values = [x + y for x, y in zip(self.values, other.values)]
-        return Vector(values)
+        else:
+            values = [x + y for x, y in zip(self.values, other.values)]
+            return Vector(values)
 
     def __radd__(self, other):
         return self + other
 
     def __sub__(self, other):
         if not isinstance(other, Vector):
-            raise TypeError("Can only sub vector to vector")
+            return NotImplemented
         elif other.size != self.size:
             raise ValueError("Can only sub to same size vector")
         values = [x - y for x, y in zip(self.values, other.values)]
@@ -48,20 +49,21 @@ class Vector:
 
     def __truediv__(self, other):
         if not isinstance(other, numbers.Number):
-            raise TypeError("Can only div vector by number")
+            return NotImplemented
         return Vector([x / other for x in self.values])
 
     def __rtruediv__(self, other):
-        raise NotImplementedError("Can only div vector by number")
+        return NotImplemented
 
     def __mul__(self, other):
         if isinstance(other, numbers.Number):
-            return Vector([x * other for x in self.values])
+            return Vector([float(x * other) for x in self.values])
         elif isinstance(other, Vector):
             if self.size != other.size:
                 raise ValueError("Can only mult same size vectors")
             return sum([x * y for x, y in zip(self.values, other.values)])
-        raise TypeError("Can only mult vector with number or vector")
+        else:
+            return NotImplemented
 
     def __rmul__(self, other):
         return self * other
